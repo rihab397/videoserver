@@ -4,7 +4,9 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const {v4: uuidV4} = require('uuid')
+require('dotenv').config()
 
+var  port =process.env.PORT || 1370 || 2000 || 5000
 app.set('view engine', 'ejs') // Tell Express we are using EJS
 app.use(express.static('public')) // Tell express to pull the client script from the public folder
 
