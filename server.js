@@ -19,7 +19,7 @@ var {uploadAndSaveVideoModel}=require('./models/uploadAndSaveVideo')
 
 app.use("/upload",uploadAndSaveVideoRoute);
 
-app.get('/upload', (req, res) => {
+app.get('/uploadVideo', (req, res) => {
     res.render('room')
 })
 
