@@ -19,7 +19,7 @@ var saveVideo= async(req,res)=>{
          })
     }
 
-        
+    res.send("upload successfull");
     }
     catch(er){
         res.send({
@@ -27,7 +27,7 @@ var saveVideo= async(req,res)=>{
         })
     }
     
-      res.send("dd");
+     
   }
   module.exports={
       saveVideo:saveVideo
