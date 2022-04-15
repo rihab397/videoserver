@@ -2,34 +2,44 @@
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)
+var multer=require("multer");
 const io = require('socket.io')(server)
 const {v4: uuidV4} = require('uuid')
 require('dotenv').config()
-
+app.use(express.static('files'));
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended:false}))
+var path=require('path');
+var fs=require('fs');
 var  port =process.env.PORT || 1370 || 2000 || 5000
-app.set('view engine', 'ejs') // Tell Express we are using EJS
-app.use(express.static('public')) // Tell express to pull the client script from the public folder
+app.set('view engine', 'ejs') 
+var uploadAndSaveVideoRoute=require('./routers/uploadAndSaveVideo')
+var streamVideo=require('./routers/streamVideo')
+var {uploadAndSaveVideoModel}=require('./models/uploadAndSaveVideo')
 
-// If they join the base link, generate a random UUID and send them to a new room with said UUID
+app.use("/upload",uploadAndSaveVideoRoute);
+
 app.get('/', (req, res) => {
-    res.redirect(`/${uuidV4()}`)
-})
-// If they join a specific room, then render that room
-app.get('/:room', (req, res) => {
-    res.render('room', {roomId: req.params.room})
-})
-// When someone connects to the server
-io.on('connection', socket => {
-    // When someone attempts to join the room
-    socket.on('join-room', (roomId, userId) => {
-        socket.join(roomId)  // Join the room
-        socket.broadcast.emit('user-connected', userId) // Tell everyone else in the room that we joined
-        
-        // Communicate the disconnection
-        socket.on('disconnect', () => {
-            socket.broadcast.emit('user-disconnected', userId)
-        })
-    })
+    res.render('room')
 })
 
-server.listen(port) // Run the server on the 3000 port
+app.get("/video", function (req, res) {
+    res.sendFile(__dirname + "/index.html");
+  });
+
+  app.get("/download", (req,res)=> {
+  res.download(`files/${req.query.fileName}`);
+  });
+
+  app.get("/fetchVideo",async (req,res)=> {
+  var videoData= await uploadAndSaveVideoModel.find({userName:req.query.userName,})
+  console.log(videoData);
+  res.status(200).send(videoData);
+    });
+  
+
+  app.use("/videog",streamVideo)
+
+
+  
+server.listen(4000) // Run the server on the 3000 port
