@@ -19,7 +19,7 @@ var {uploadAndSaveVideoModel}=require('./models/uploadAndSaveVideo')
 
 app.use("/upload",uploadAndSaveVideoRoute);
 
-app.get('/', (req, res) => {
+app.get('/upload', (req, res) => {
     res.render('room')
 })
 
@@ -42,4 +42,4 @@ app.get("/video", function (req, res) {
 
 
   
-server.listen(port) // Run the server on the 3000 port
+server.listen(4000) // Run the server on the 3000 port
