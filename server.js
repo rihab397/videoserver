@@ -42,4 +42,4 @@ app.get("/video", function (req, res) {
 
 
   
-server.listen(4000) // Run the server on the 3000 port
+server.listen(port) // Run the server on the 3000 port
